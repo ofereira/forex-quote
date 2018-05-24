@@ -11,7 +11,21 @@
       </div>
     </v-toolbar>
     <v-content>
-      <router-view></router-view>
+      <router-view v-if="marketStatus === 'OPEN'"></router-view>
+      <v-card v-if="marketStatus === 'CLOSED'" flat>
+        <v-card-text class="flex"
+          style="
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 80vh;
+            ">
+          <span class="headline secondary--text">Market is CLOSED</span>
+          <br/>
+          <span class="display-2 secondary--text">The service is not available, come back later</span>
+        </v-card-text>
+      </v-card>
     </v-content>
   </v-app>
 </template>

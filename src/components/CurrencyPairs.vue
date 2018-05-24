@@ -5,7 +5,7 @@
           <td class="text-xs-left">{{ props.item.bid }}</td>
           <td class="text-xs-left">{{ props.item.ask }}</td>
           <td class="text-xs-left">{{ spreadPercent(props.item.bid, props.item.ask) }} %</td>
-          <td class="text-xs-left">{{ dateFormat(props.item.timestamp) }}</td>
+          <!-- <td class="text-xs-left">{{ dateFormat(props.item.timestamp) }}</td> -->
         </template>
       </v-data-table>
 </template>
@@ -35,21 +35,18 @@
         },
         {
           text: 'Bid',
+          sortable: false,
           value: 'bid'
         },
         {
           text: 'Ask',
+          sortable: false,
           value: 'ask'
         },
         {
           text: 'Spread %',
-          value: 'spread',
-          sortable: false
-        },
-        {
-          text: 'Time',
-          value: 'time',
-          sortable: false
+          sortable: false,
+          value: 'spread'
         }
         ]
       }

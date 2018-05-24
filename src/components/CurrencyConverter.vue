@@ -1,128 +1,56 @@
 <template>
-  <v-layout wrap>
-    <v-flex xs12>
-      <v-select
-        v-model="select"
-        :items="items"
-        label="Select pairs to show"
-        autocomplete
-        chips
-        tags
-      >
-        <template slot="selection" slot-scope="data">
-          <v-chip
-            :selected="data.selected"
-            :disabled="data.disabled"
-            :key="JSON.stringify(data.item)"
-            close color="primary" text-color="white"
-            @input="data.parent.selectItem(data.item)"
-          >
-            {{ data.item }}
-          </v-chip>
-        </template>
-      </v-select>
-    </v-flex>
-    <v-flex class="text-xs-center" xs12>
-      <v-btn class="primary">UPDATE</v-btn>
-    </v-flex>
-    <v-flex>
-      <v-data-table :headers="headers" :items="desserts" hide-actions class="elevation-1">
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.symbol }}</td>
-          <td class="text-xs-left">{{ props.item.bid }}</td>
-          <td class="text-xs-left">{{ props.item.ask }}</td>
-          <td class="text-xs-left">{{ spreadPercent(props.item.bid, props.item.ask) }} %</td>
-          <td class="text-xs-left">{{ dateFormat(props.item.timestamp) }}</td>
-        </template>
-      </v-data-table>
-    </v-flex>
-  </v-layout>
+  <div class="text-xs-center">
+    <span v-if="conversionResponse === null" class="display-1 secondary--text">Enter the amount <v-icon medium color="secondary">sentiment_satisfied_alt</v-icon></span>
+    <div v-else>
+      <div v-if="conversionResponse.text">
+        <span class="display-1 secondary--text">{{conversionResponseObject.amount}} {{conversionResponseObject.currencyFrom}} = </span>
+        <span class="display-2 primary--text">{{conversionResponse.value}}</span>
+        <span class="display-1 secondary--text">{{conversionResponseObject.currencyTo}}</span>
+        <br/>
+        <span class="title secondary--text">{{conversionResponseObject.currencyFrom}} <v-btn icon class="secondary"><v-icon>swap_horiz</v-icon></v-btn> {{conversionResponseObject.currencyTo}}</span>
+      </div>
+      <div v-if="conversionResponse.message">
+        <span class="display-1 secondary--text">Error <v-icon medium color="secondary">sentiment_very_dissatisfied</v-icon></span>
+        <br/>
+        <span class="body-1 red--text">{{conversionResponseObject}}</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
   import moment from 'moment'
 
   export default {
+    props: ['amount', 'currencyFrom', 'currencyTo', 'conversionResponse', 'swapCurrencies'],
+    computed: {
+      conversionResponseObject () {
+        if (this.conversionResponse !== null) {
+          if (this.conversionResponse.text) {
+            let cResponseArray = this.conversionResponse.text.split(' ')
+            let cResponseObject = {
+              amount: cResponseArray[0],
+              currencyFrom: cResponseArray[1],
+              currencyTo: cResponseArray[5]
+            }
+            return cResponseObject
+          } else if (this.conversionResponse.message) {
+            let cResponseError = this.conversionResponse.message
+            return cResponseError
+          }
+        } else {
+          return {}
+        }
+      }
+    },
     methods: {
       dateFormat (timestamp) {
         var time = moment.unix(timestamp).format('HH:mm:ss')
         return time
-      },
-      spreadPercent (bid, ask) {
-        var spread = ((ask - bid) / ask) * 100
-        return spread.toFixed(3)
       }
     },
     data () {
       return {
-        select: ['AUDUSD', 'EURUSD', 'GBPJPY'],
-        items: [
-          'AUDJPY',
-          'AUDUSD',
-          'CHFJPY',
-          'EURAUD',
-          'EURCAD',
-          'EURCHF',
-          'EURGBP',
-          'EURJPY',
-          'EURUSD',
-          'GBPAUD',
-          'GBPCAD',
-          'GBPCHF',
-          'GBPJPY',
-          'NZDJPY',
-          'NZDUSD',
-          'USDCAD',
-          'USDCHF',
-          'USDJPY',
-          'AUDCAD',
-          'AUDCHF'
-        ],
-        headers: [{
-          text: 'Pair',
-          align: 'left',
-          sortable: false,
-          value: 'pair'
-        },
-        {
-          text: 'Bid',
-          value: 'bid'
-        },
-        {
-          text: 'Ask',
-          value: 'ask'
-        },
-        {
-          text: 'Spread %',
-          value: 'spread'
-        },
-        {
-          text: 'Time',
-          value: 'time'
-        }
-        ],
-        desserts: [{
-          symbol: 'AUDUSD',
-          price: 0.792495,
-          bid: 0.79248,
-          ask: 0.79251,
-          timestamp: 1502160793
-        },
-        {
-          symbol: 'EURUSD',
-          price: 1.181,
-          bid: 1.18099,
-          ask: 1.18101,
-          timestamp: 1502160794
-        },
-        {
-          symbol: 'GBPJPY',
-          price: 144.3715,
-          bid: 144.368,
-          ask: 144.375,
-          timestamp: 1502160794
-        }
-        ]
       }
     }
   }
