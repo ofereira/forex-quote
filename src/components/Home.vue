@@ -14,7 +14,7 @@
         <v-tab-item key="1" id="tab-1">
           <v-card flat>
             <!-- Card Currency Pairs Start -->
-            <v-card-text v-if>
+            <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 offset-sm2 sm8>
@@ -64,7 +64,7 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex my-3 xs12>
-                    <currency-converter :swapCurrencies="swapCurrencies()" :amount="amount" :currencyFrom="currencyFrom" :currencyTo="currencyTo" :conversionResponse="conversionResponse"></currency-converter>
+                    <currency-converter :swapCurrencies="swapCurrencies" :loadingSwap="loadingSwap" :amount="amount" :conversionResponse="conversionResponse"></currency-converter>
                   </v-flex>
                   <v-flex xs2 offset-sm2 sm2>
                     <v-text-field
@@ -121,12 +121,6 @@
       'currency-pairs': CurrencyPairs,
       'currency-converter': CurrencyConverter
     },
-    watch: {
-      currencyPairsSymbolList () {
-        this.currencyFromList = this.currencySymbolList
-        this.currencyToList = this.currencySymbolList
-      }
-    },
     computed: {
       currencySymbolList () {
         let cSymbolList = []
@@ -156,24 +150,47 @@
         })
       },
       getCurrencyPairsQuotes () {
-        let pairs = this.pairsSelected
-        let url = '/quotes?pairs=' + pairs
-        this.loadingQuotes = true
-        HTTP.get(url)
-        .then(response => {
-          this.currencyPairsQuotes = response.data
-          this.loadingQuotes = false
-        })
-        .catch(e => {
-          console.log(e)
-          this.loadingQuotes = false
-        })
+        if (this.pairsSelected.length > 0) {
+          let pairs = this.pairsSelected
+          let url = '/quotes?pairs=' + pairs
+          this.loadingQuotes = true
+          HTTP.get(url)
+          .then(response => {
+            this.currencyPairsQuotes = response.data
+            this.loadingQuotes = false
+          })
+          .catch(e => {
+            console.log(e)
+            this.loadingQuotes = false
+          })
+        } else {
+          this.currencyPairsQuotes = []
+        }
       },
       swapCurrencies () {
-        let temp = this.currencyFrom
-        this.currencyFrom = this.currencyTo
-        this.currencyTo = temp
-        this.convertAmount()
+        if (this.currencyFrom !== this.currencyTo) {
+          let temp = this.currencyResponseFrom
+          this.currencyResponseFrom = this.currencyResponseTo
+          this.currencyResponseTo = temp
+          this.loadingSwap = true
+          let params = queryString.stringify({
+            from: this.currencyResponseFrom,
+            to: this.currencyResponseTo,
+            quantity: this.amountResponse
+          }, {
+            sort: false
+          })
+          let url = 'convert?' + params
+          HTTP.get(url)
+          .then(response => {
+            this.conversionResponse = response.data
+            this.loadingSwap = false
+          })
+          .catch(e => {
+            console.log(e)
+            this.loadingSwap = false
+          })
+        }
       },
       convertAmount () {
         if (!this.isNumeric(this.amount)) {
@@ -182,6 +199,12 @@
         } else if (this.currencyFrom === null || this.currencyTo === null) {
           this.conversionResponse = {}
           this.conversionResponse.message = 'Please select currencies to convert'
+        } else if (this.currencyFrom === this.currencyTo) {
+          this.conversionResponse = {
+            value: this.amount,
+            text: `${this.amount} ${this.currencyFrom} is worth ${this.amount} ${this.currencyTo}`,
+            timestamp: null
+          }
         } else {
           this.loadingConversion = true
           let params = queryString.stringify({
@@ -195,6 +218,9 @@
           HTTP.get(url)
           .then(response => {
             this.conversionResponse = response.data
+            this.amountResponse = this.amount
+            this.currencyResponseFrom = this.currencyFrom
+            this.currencyResponseTo = this.currencyTo
             this.loadingConversion = false
           })
           .catch(e => {
@@ -210,15 +236,20 @@
     },
     data () {
       return {
+
         amount: null,
+        amountResponse: null,
         conversionResponse: null,
         currencyPairsQuotes: [],
         pairsSelected: ['USDEUR'],
         currencyPairsSymbolList: [],
         currencyFrom: null,
         currencyTo: null,
+        currencyResponseFrom: null,
+        currencyResponseTo: null,
         loadingQuotes: false,
-        loadingConversion: false
+        loadingConversion: false,
+        loadingSwap: false
       }
     }
   }

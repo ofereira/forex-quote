@@ -1,13 +1,21 @@
 <template>
-      <v-data-table :headers="headers" :items="currencyPairsQuotes" :loading="loadingQuotes" class="elevation-1">
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.symbol }}</td>
-          <td class="text-xs-left">{{ props.item.bid }}</td>
-          <td class="text-xs-left">{{ props.item.ask }}</td>
-          <td class="text-xs-left">{{ spreadPercent(props.item.bid, props.item.ask) }} %</td>
-          <!-- <td class="text-xs-left">{{ dateFormat(props.item.timestamp) }}</td> -->
-        </template>
-      </v-data-table>
+  <div>
+    <div v-if="currencyPairsQuotes.length > 0" class="text-xs-center body-1 transparentColorDefault"><v-icon small>timer</v-icon> {{dateFormat(currencyPairsQuotes[0].timestamp)}}</div>
+    <v-data-table :headers="headers" :items="currencyPairsQuotes" :loading="loadingQuotes" class="elevation-1">
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.symbol }}</td>
+        <td class="text-xs-left">{{ props.item.bid }}</td>
+        <td class="text-xs-left">{{ props.item.ask }}</td>
+        <td class="text-xs-left">{{ spreadPercent(props.item.bid, props.item.ask) }} %</td>
+        <!-- <td class="text-xs-left">{{ dateFormat(props.item.timestamp) }}</td> -->
+      </template>
+      <template slot="no-data">
+        <div class="text-xs-center">
+          <span class="body-1 transparentColorDefault">Select at least 1 currency pair <v-icon small>sentiment_very_satisfied</v-icon></span>
+        </div>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>

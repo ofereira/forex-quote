@@ -57,3 +57,9 @@
     }
   }
 </script>
+
+<style>
+.transparentColorDefault{
+  color: rgba(0,0,0,.54)
+}
+</style>
