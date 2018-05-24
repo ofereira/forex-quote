@@ -3,15 +3,15 @@ Forex | Currency Pairs Quotes & Currency Converter Web App with Vue JS + Vuetify
 >This project has educational :books: purposes. I do not intend to be an expert, I am improving my skills but this can serve other people to learn.
 ## Screenshots
 
-![enter image description here](https://lh3.googleusercontent.com/hzncNl_2WxQZXvV9swVh8cfptpJgqSPg9zk57_C8RL8ER22NMrHkuyq88dBNeuw9JRC17YEIm9A)
+![enter image description here](https://lh3.googleusercontent.com/hzncNl_2WxQZXvV9swVh8cfptpJgqSPg9zk57_C8RL8ER22NMrHkuyq88dBNeuw9JRC17YEIm9A=s1000)
 ___
-![enter image description here](https://lh3.googleusercontent.com/2-FIGmsLaovZYIz30GPETgmAnxVDvgtKjsnFUz0DmaKJuQe0TbJ8AzvOGgg0ti7ubHBH8f60cdI)
+![enter image description here](https://lh3.googleusercontent.com/2-FIGmsLaovZYIz30GPETgmAnxVDvgtKjsnFUz0DmaKJuQe0TbJ8AzvOGgg0ti7ubHBH8f60cdI=s1000)
 ___
-![enter image description here](https://lh3.googleusercontent.com/KCJQrzhYU7cL-mBmoUwSll922Wjt0JMWQoduIQu8cg16PMuwdTvr699Z1Vrem1MqRO7lbVC4UmA)
+![enter image description here](https://lh3.googleusercontent.com/KCJQrzhYU7cL-mBmoUwSll922Wjt0JMWQoduIQu8cg16PMuwdTvr699Z1Vrem1MqRO7lbVC4UmA=s1000)
 ___
-![enter image description here](https://lh3.googleusercontent.com/9cLjn9Va8-aDn2h0_2WqXj8WrRvJLcc3zpnYyy8MMkFbbNdHiqQ18qOG0jyLOi1ME0zsN5lrZT8)
+![enter image description here](https://lh3.googleusercontent.com/9cLjn9Va8-aDn2h0_2WqXj8WrRvJLcc3zpnYyy8MMkFbbNdHiqQ18qOG0jyLOi1ME0zsN5lrZT8=s1000)
 ___
-![enter image description here](https://lh3.googleusercontent.com/OvTtJmpMQU79jKNqoWMMdk8RulI2t38OSrvaMEnP9xEYHLeKsUjloanDoBXaXyc6nYhaoUS0L3E)
+![enter image description here](https://lh3.googleusercontent.com/OvTtJmpMQU79jKNqoWMMdk8RulI2t38OSrvaMEnP9xEYHLeKsUjloanDoBXaXyc6nYhaoUS0L3E=s1000)
 
 ## Packages
 
